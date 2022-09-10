@@ -19,8 +19,8 @@ pipeline {
                 steps{
                     
                     withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
-                        withCredentials([string(credentialsId: 'admin', variable: '-469GxqQSz7.fs.')]) {
-                            bat '''
+                        withCredentials([string(credentialsId: 'khaoula', variable: '707a76f307c14ed1b1844a78534345d0')]) {
+                            sh '''
                                 mvn sonar:sonar \
                                 -D sonar.projectKey=org.springframework.boot \
                                 -D sonar.host.url=http://102.159.202.139:9000 \
