@@ -9,22 +9,22 @@ pipeline {
                 }
                 
          
-          stage("build & SonarQube analysis") {
-            steps {
-                      withSonarQubeEnv('SonarQube') {
-                        bat 'mvn clean package sonar:sonar'
-                      }
-                    }
-                  }
-
-          stage("Quality Gate") {
-                    steps {
-                    timeout(time: 1, unit: 'HOURS') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                    }
-                    }
-         
+          stage('SonarQube Analysis') {
+    def scannerHome = tool 'SonarQube'
+      withSonarQubeEnv('SonarQube') {
+      bat """C:/sonarqube-9.5.0.56709/sonar-scanner-4.7.0.2747-windows/bin \
+      -D sonar.projectVersion=2.5.5 \
+       -D sonar.login=admin \
+      -D sonar.password=-469GxqQSz7.fs. \
+      -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/summerInternship2 \
+        -D sonar.projectKey=org.springframework.boot \
+        -D sonar.sourceEncoding=UTF-8 \
+        -D sonar.language=java \
+        -D sonar.sources=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/main \
+        -D sonar.tests=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/test \
+        -D sonar.host.url=http://102.159.202.139:9000/"""
+        }
+}
          
 
 
