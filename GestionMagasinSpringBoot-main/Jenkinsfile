@@ -9,38 +9,26 @@ pipeline {
                 }
                 
          
-         stage('Code Analysis with SONARQUBE') {
-            environment{
-                scannerHome = tool 'SonarQube'
+         stage("build & SonarQube analysis") {
+          node {
+              withSonarQubeEnv('SonarQube') {
+                 bat 'mvn clean package sonar:sonar'
+              }
+          }
+      }
 
-            }
+      stage("Quality Gate"){
+          timeout(time: 1, unit: 'HOURS') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      }
 
-            steps{
-                
-                withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
-                    withCredentials([string(credentialsId: 'joujou2', variable: 'joujou2')]) {
-                    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar /home/.../jar/server-process-0.35.jar prod >> /var/../server-process-prod.log 2>&1 &'
 
-                        sh '''
-                            mvn sonar:sonar \
-                            -D sonar.login=admin \
-                              -D sonar.password=-469GxqQSz7.fs. \
-                              -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/summerInternship2 \
-                                -D sonar.projectKey=org.springframework.boot \
-                                -D sonar.sourceEncoding=UTF-8 \
-                                -D sonar.language=java \
-                                -D sonar.sources=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/main \
-                                -D sonar.tests=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/test \
-                                -D sonar.host.url=http://102.159.202.139:9000
-                            '''
-
-                    } 
-                    
-                }
-
-            }
-         }
         
         }
 
 }
+        
