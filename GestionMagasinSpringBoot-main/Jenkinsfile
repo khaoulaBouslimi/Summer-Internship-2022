@@ -19,7 +19,7 @@ pipeline {
                 
                 withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
                     withCredentials([string(credentialsId: 'joujou2', variable: 'joujou2')]) {
-                        sh '''
+                        bat '''
                             mvn sonar:sonar \
                             -D sonar.login=admin \
                               -D sonar.password=-469GxqQSz7.fs. \
