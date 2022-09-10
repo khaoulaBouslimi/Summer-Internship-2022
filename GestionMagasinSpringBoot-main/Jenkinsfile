@@ -19,7 +19,9 @@ pipeline {
                 
                 withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
                     withCredentials([string(credentialsId: 'joujou2', variable: 'joujou2')]) {
-                        bat '''
+                    sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar /home/.../jar/server-process-0.35.jar prod >> /var/../server-process-prod.log 2>&1 &'
+
+                        sh '''
                             mvn sonar:sonar \
                             -D sonar.login=admin \
                               -D sonar.password=-469GxqQSz7.fs. \
