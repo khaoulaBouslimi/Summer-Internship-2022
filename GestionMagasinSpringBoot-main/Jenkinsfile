@@ -4,14 +4,17 @@ pipeline {
           stage('Cloning from GitHub') {
             steps {
                 git branch: 'develop', credentialsId: 'github-private-key', url: 'https://github.com/khaoulaBouslimi/Summer-Internship-2022'
-                                    }
-                                }
+                }
                 
+                }
+                
+         
          stage('Code Analysis with SONARQUBE') {
             environment{
                 scannerHome = tool 'SonarQube'
 
             }
+
             steps{
                 
                 withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
@@ -34,6 +37,8 @@ pipeline {
                 }
 
             }
+         }
         
-        
+        }
+
 }
