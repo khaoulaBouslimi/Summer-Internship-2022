@@ -1,24 +1,39 @@
 pipeline {
         agent any
         stages {
-          stage("hello world !") {
-                                    steps {
-                                            echo'hello world !'
+          stage('Cloning from GitHub') {
+            steps {
+                git branch: 'develop', credentialsId: 'github-private-key', url: 'https://github.com/khaoulaBouslimi/Summer-Internship-2022'
                                     }
                                 }
                 
-          stage("Build") {
-                            steps {
-                                    echo'Building !'
-                            }
-                        }
+         stage('Code Analysis with SONARQUBE') {
+            environment{
+                scannerHome = tool 'SonarQube'
+
+            }
+            steps{
                 
-          stage("Test") {
-                            steps {
-                                    echo'Testing !'
-                            }
-                        }      
-        }
+                withSonarQubeEnv(credentialsId: 'joujou2',installationName: 'SonarQube') {
+                    withCredentials([string(credentialsId: 'joujou2', variable: 'joujou2')]) {
+                        sh '''
+                            mvn sonar:sonar \
+                            -D sonar.login=admin \
+                              -D sonar.password=-469GxqQSz7.fs. \
+                              -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/summerInternship2 \
+                                -D sonar.projectKey=org.springframework.boot \
+                                -D sonar.sourceEncoding=UTF-8 \
+                                -D sonar.language=java \
+                                -D sonar.sources=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/main \
+                                -D sonar.tests=Summer-Internship-2022/GestionMagasinSpringBoot-main/src/test \
+                                -D sonar.host.url=http://102.159.202.139:9000
+                            '''
+
+                    } 
+                    
+                }
+
+            }
         
         
 }
